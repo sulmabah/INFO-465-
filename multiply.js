@@ -1,62 +1,55 @@
 // multiply.js
-// Node.js version: prompts user for integers, echoes them, and checks multiplication condition
+// Node.js script: prompts user for integers, echoes them, and checks multiplication condition
 
 const readline = require('readline');
-
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
-const inputs = [];
+const numbers = [];
 
-function askForInput() {
-  rl.question("Enter an integer (or 'q' to quit): ", (answer) => {
-    const trimmed = answer.trim();
+function promptUser() {
+  rl.question('Enter a whole number or "q" to quit: ', (input) => {
+    const trimmed = input.trim();
 
     if (trimmed.toLowerCase() === 'q') {
-      summarizeInputs();
+      console.log('Numbers entered:', numbers.join(', '));
+      checkCondition(numbers);
       rl.close();
       return;
     }
 
     if (!/^[-+]?\d+$/.test(trimmed)) {
-      console.log("❌ Error: Please enter a valid integer or 'q' to quit.");
-      askForInput();
+      console.log('❌ Invalid input. Please enter a whole number or "q" to quit.');
+      promptUser();
       return;
     }
 
-    inputs.push(parseInt(trimmed));
-    askForInput();
+    numbers.push(Number(trimmed));
+    promptUser();
   });
 }
 
-function summarizeInputs() {
-  if (inputs.length === 0) {
-    console.log("No integers were entered.");
-    return;
-  }
-
-  console.log("You entered:", inputs.join(", "));
-
-  let conditionMet = false;
-
-  for (let i = 0; i < inputs.length; i++) {
-    for (let j = 0; j < inputs.length; j++) {
-      if (i === j) continue;
-      const product = inputs[i] * inputs[j];
-      if (inputs.includes(product)) {
-        console.log(`✅ Condition is met: ${inputs[i]} x ${inputs[j]} = ${product}`);
-        conditionMet = true;
-        return;
+function checkCondition(arr) {
+  let found = false;
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = 0; j < arr.length; j++) {
+      if (i !== j) {
+        const product = arr[i] * arr[j];
+        if (arr.includes(product)) {
+          console.log(`✅ Condition met: ${arr[i]} * ${arr[j]} = ${product}`);
+          found = true;
+          return;
+        }
       }
     }
   }
 
-  if (!conditionMet) {
-    console.log("❌ Condition was not met.");
+  if (!found) {
+    console.log('❌ No two numbers multiply to form another number in the list.');
   }
 }
 
 // Start the input loop
-askForInput();
+promptUser();
