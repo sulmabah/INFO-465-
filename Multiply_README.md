@@ -1,0 +1,1 @@
+Prompts user for integers, handles different cases depending on how many integers are entered, checks if any two disttinct numbers in the list can be multiplied to produce a specific target product, and if such pair exists, the conditions are met.
